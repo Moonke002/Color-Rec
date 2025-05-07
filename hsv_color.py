@@ -3,16 +3,15 @@
 import cv2 as cv
 import numpy as np
 
-def nothing(x): 
+def nothing(x): #dummy callback
     pass
 
 #creates window and trackbar
 cv.namedWindow("HSV Frame")
-cv.createTrackbar("H", "HSV Frame", 0, 179, nothing)
-cv.createTrackbar("S", "HSV Frame", 0, 255, nothing)
-cv.createTrackbar("V", "HSV Frame", 0, 255, nothing)
+for name, max_val in zip(("H", "S", "V"), (179, 255, 255)):
+    cv.createTrackbar(name, "HSV Frame", 0, max_val, nothing)
 
-img_hsv = np.zeros((250, 500 ,3), np.uint8)
+img_hsv = np.zeros((250, 500 ,3), np.uint8) #blank image and size
 
 
 #gets trackbar position
@@ -21,12 +20,12 @@ while True:
     s = cv.getTrackbarPos("S", "HSV Frame")
     v = cv.getTrackbarPos("V", "HSV Frame")
 
-    img_hsv[:] = (h,s,v)
-    img_rgb = cv.cvtColor(img_hsv, cv.COLOR_HSV2RGB)
+    img_hsv[:] = (h,s,v) #sets pixels to hsv colors
+    img_rgb = cv.cvtColor(img_hsv, cv.COLOR_HSV2RGB) #converts hsv to rgb for better display
 
     cv.imshow("HSV Frame", img_rgb)
     key = cv.waitKey(1) #waitkey to keep open and running
-    if key == 27:
+    if key == 27 or key == ord("q"): #escape/q to break
         break
 
 cv.destroyAllWindows()
